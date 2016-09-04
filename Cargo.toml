@@ -1,0 +1,6 @@
+[package]
+name = "multi-member-sort"
+version = "0.1.0"
+authors = ["Adam Faur <adam.faur@gmail.com>"]
+
+[dependencies]

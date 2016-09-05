@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Adam Faur <adam.faur@gmail.com>"]
 
 [dependencies]
+copperline = "0.3.0"

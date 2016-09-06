@@ -1,11 +1,24 @@
-extern crate copperline;
+use std::io;
+use std::io::prelude::*;
+use std::fs::File;
 
-use copperline::Copperline;
+fn read_line(input: &mut String) -> io::Result<()> {
+  try!(io::stdin().read_line(input));
+  Ok(())
+}
+
+fn read_file(filename: &'static str, file_contents: &mut String) -> io::Result<()> {
+  let mut f = try!(File::open(filename));
+  try!(f.read_to_string(file_contents));
+  Ok(())
+}
 
 fn main() {
-  let mut cl = Copperline::new();
-  while let Ok(line) = cl.read_line_utf8(">> ") {
-    println!("Line: {}", line);
-    cl.add_history(line);
-  }
+  let mut input = String::new();
+  read_line(&mut input).unwrap();
+  println!("{:?}", input);
+
+  let mut file_contents = String::new();
+  read_file("./data/list.txt", &mut file_contents).unwrap();
+  println!("{:?}", file_contents.lines());
 }

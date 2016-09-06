@@ -25,7 +25,7 @@ fn get_list_count() -> i32 {
 fn main() {
   let mut file_contents = String::new();
   read_file("./data/list.txt", &mut file_contents).unwrap();
-  let original_list:Vec<&str> = file_contents.trim().split("\n").collect();
+  let mut original_list:Vec<&str> = file_contents.trim().split("\n").collect();
   println!("{:?}", original_list);
 
   let list_count = get_list_count();
@@ -38,5 +38,16 @@ fn main() {
     });
     lists.push(new_list);
   }
-  println!("{:?}", lists);
+
+  original_list.sort_by(|a, b| {
+    let a_abs = lists.iter().fold(0, |memo, list| {
+      memo + list.binary_search(a).unwrap()
+    });
+    let b_abs = lists.iter().fold(0, |memo, list| {
+      memo + list.binary_search(b).unwrap()
+    });
+    a_abs.cmp(&b_abs)
+  });
+
+  println!("{:?}", original_list);
 }

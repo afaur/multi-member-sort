@@ -13,9 +13,8 @@ fn read_file(filename: &'static str, file_contents: &mut String) -> Result<()> {
   Ok(())
 }
 
-fn get_list_count() -> i32 {
+fn get_count() -> i32 {
   let mut input = String::new();
-  print!("How many people? ");
   stdout().flush().ok();
   read_line(&mut input).unwrap();
 
@@ -28,25 +27,32 @@ fn main() {
   let mut original_list:Vec<&str> = file_contents.trim().split("\n").collect();
   println!("{:?}", original_list);
 
-  let list_count = get_list_count();
+  print!("How many people? ");
+  let list_count = get_count();
   let mut lists:Vec<Vec<&str>> = vec![];
 
-  for _ in 0..list_count {
+  for x in 0..list_count {
     let mut new_list = original_list.clone();
+    println!("Person {} go!", x);
     new_list.sort_by(|a, b| {
-      a.cmp(b)
+      println!("1) {0} > {1}\n2) Equal\n3) {0} < {1}", a, b);
+      let get_sort = get_count();
+      2.cmp(&get_sort)
     });
     lists.push(new_list);
   }
 
   original_list.sort_by(|a, b| {
     let a_abs = lists.iter().fold(0, |memo, list| {
-      memo + list.binary_search(a).unwrap()
+      println!("Looking for {} in {:?}", a, list);
+      let found = list.iter().position(|&item| {
+        println!("rawr {} and {}", item, a);
+        item == &a
+      });
+      println!("{:?}", found);
+      0
     });
-    let b_abs = lists.iter().fold(0, |memo, list| {
-      memo + list.binary_search(b).unwrap()
-    });
-    a_abs.cmp(&b_abs)
+    a_abs.cmp(&0)
   });
 
   println!("{:?}", original_list);

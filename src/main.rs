@@ -35,24 +35,23 @@ fn main() {
     let mut new_list = original_list.clone();
     println!("Person {} go!", x);
     new_list.sort_by(|a, b| {
-      println!("1) {0} > {1}\n2) Equal\n3) {0} < {1}", a, b);
+      println!("1) {0}\n2) Equal\n3) {1}", a, b);
       let get_sort = get_count();
       2.cmp(&get_sort)
     });
     lists.push(new_list);
   }
 
-  original_list.sort_by(|a, b| {
+  original_list.sort_by(|&a, &b| {
     let a_abs = lists.iter().fold(0, |memo, list| {
-      println!("Looking for {} in {:?}", a, list);
-      let found = list.iter().position(|&item| {
-        println!("rawr {} and {}", item, a);
-        item == &a
-      });
-      println!("{:?}", found);
-      0
+      let index = list.iter().position(|&item| item == a).unwrap();
+      index + memo
     });
-    a_abs.cmp(&0)
+    let b_abs = lists.iter().fold(0, |memo, list| {
+      let index = list.iter().position(|&item| item == b).unwrap();
+      index + memo
+    });
+    b_abs.cmp(&a_abs)
   });
 
   println!("{:?}", original_list);

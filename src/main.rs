@@ -13,7 +13,7 @@ fn read_file(filename: &'static str, file_contents: &mut String) -> Result<()> {
   Ok(())
 }
 
-fn get_count() -> i32 {
+fn get_number_input() -> i32 {
   let mut input = String::new();
   stdout().flush().ok();
   read_line(&mut input).unwrap();
@@ -21,38 +21,45 @@ fn get_count() -> i32 {
   return input.trim().parse::<i32>().unwrap();
 }
 
-fn main() {
+fn get_list(list: &mut Vec<String>) {
   let mut file_contents = String::new();
   read_file("./data/list.txt", &mut file_contents).unwrap();
-  let mut original_list:Vec<&str> = file_contents.trim().split("\n").collect();
-  println!("{:?}", original_list);
+  for item in file_contents.trim().split("\n") {
+    list.push(item.to_string());
+  }
+}
+
+fn user_sort_list(list: &mut Vec<String>) {
+  list.sort_by(|a, b| {
+    println!("1) {0}\n2) Equal\n3) {1}", a, b);
+    let get_sort = get_number_input();
+    2.cmp(&get_sort)
+  });
+}
+
+fn main() {
+  let mut original_list:Vec<String> = vec![];
+  get_list(&mut original_list);
 
   print!("How many people? ");
-  let list_count = get_count();
-  let mut lists:Vec<Vec<&str>> = vec![];
+  let list_count = get_number_input();
+  let mut lists:Vec<Vec<String>> = vec![];
 
-  for x in 0..list_count {
+  for _ in 0..list_count {
     let mut new_list = original_list.clone();
-    println!("Person {} go!", x);
-    new_list.sort_by(|a, b| {
-      println!("1) {0}\n2) Equal\n3) {1}", a, b);
-      let get_sort = get_count();
-      2.cmp(&get_sort)
-    });
+    user_sort_list(&mut new_list);
     lists.push(new_list);
   }
 
-  original_list.sort_by(|&a, &b| {
+  original_list.sort_by(|a, b| {
     let a_abs = lists.iter().fold(0, |memo, list| {
-      let index = list.iter().position(|&item| item == a).unwrap();
-      index + memo
+      memo + list.iter().position(|item| item == a).unwrap()
     });
     let b_abs = lists.iter().fold(0, |memo, list| {
-      let index = list.iter().position(|&item| item == b).unwrap();
-      index + memo
+      memo + list.iter().position(|item| item == b).unwrap()
     });
     b_abs.cmp(&a_abs)
   });
 
-  println!("{:?}", original_list);
+  println!("Averaged list: {:?}", original_list);
 }

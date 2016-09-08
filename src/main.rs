@@ -1,90 +1,10 @@
-use std::io::{Result, stdin, stdout};
-use std::io::prelude::*;
-use std::fs::File;
-use std::fmt;
+pub mod input;
+pub mod user_sorted_list;
+pub mod averaged_list;
 
-struct Input {}
-impl Input {
-  fn line(input: &mut String) -> Result<()> {
-    try!(stdin().read_line(input));
-    Ok(())
-  }
-
-  fn file(filename: &'static str, file_contents: &mut String) -> Result<()> {
-    let mut file_pointer = try!(File::open(filename));
-    try!(file_pointer.read_to_string(file_contents));
-    Ok(())
-  }
-
-  fn number() -> i32 {
-    let mut input = String::new();
-    stdout().flush().ok();
-    Input::line(&mut input).unwrap();
-
-    return input.trim().parse::<i32>().unwrap();
-  }
-}
-
-struct UserSortedList {
-  list: Vec<String>,
-}
-
-impl UserSortedList {
-  fn sort(&mut self) {
-    self.list.sort_by(|a, b| {
-      println!("1) {0}\n2) Equal\n3) {1}", a, b);
-      let get_sort = Input::number();
-      2.cmp(&get_sort)
-    });
-  }
-
-  fn position(&self, needle: &String) -> usize {
-    self.list.iter().position(|item| item == needle).unwrap()
-  }
-}
-
-struct AveragedList {
-  list: Vec<String>,
-  child_lists: Vec<UserSortedList>,
-}
-
-impl fmt::Display for AveragedList {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    write!(f, "{:?}", self.list)
-  }
-}
-
-impl AveragedList {
-  fn new() -> AveragedList {
-    let mut original_list:Vec<String> = vec![];
-    let mut file_contents = String::new();
-    Input::file("./data/list.txt", &mut file_contents).unwrap();
-    for item in file_contents.trim().split("\n") {
-      original_list.push(item.to_string());
-    }
-    AveragedList {
-      list: original_list,
-      child_lists: vec![],
-    }
-  }
-
-  fn add_child(&mut self, child_list: UserSortedList) {
-    self.child_lists.push(child_list);
-  }
-
-  fn sort(&mut self) {
-    let ref child_lists = self.child_lists;
-    self.list.sort_by(|a, b| {
-      let a_abs = child_lists.iter().fold(0, |memo, user_list| {
-        memo + user_list.position(a)
-      });
-      let b_abs = child_lists.iter().fold(0, |memo, user_list| {
-        memo + user_list.position(b)
-      });
-      b_abs.cmp(&a_abs)
-    });
-  }
-}
+use input::Input;
+use user_sorted_list::UserSortedList;
+use averaged_list::AveragedList;
 
 fn main() {
   let mut averaged_list = AveragedList::new();

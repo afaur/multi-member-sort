@@ -21,14 +21,6 @@ fn get_number_input() -> i32 {
   return input.trim().parse::<i32>().unwrap();
 }
 
-fn get_list(list: &mut Vec<String>) {
-  let mut file_contents = String::new();
-  read_file("./data/list.txt", &mut file_contents).unwrap();
-  for item in file_contents.trim().split("\n") {
-    list.push(item.to_string());
-  }
-}
-
 struct UserSortedList {
   list: Vec<String>,
 }
@@ -54,7 +46,11 @@ struct AveragedList {
 impl AveragedList {
   fn new() -> AveragedList {
     let mut original_list:Vec<String> = vec![];
-    get_list(&mut original_list);
+    let mut file_contents = String::new();
+    read_file("./data/list.txt", &mut file_contents).unwrap();
+    for item in file_contents.trim().split("\n") {
+      original_list.push(item.to_string());
+    }
     AveragedList { list: original_list }
   }
 

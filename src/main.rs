@@ -29,12 +29,22 @@ fn get_list(list: &mut Vec<String>) {
   }
 }
 
-fn user_sort_list(list: &mut Vec<String>) {
-  list.sort_by(|a, b| {
-    println!("1) {0}\n2) Equal\n3) {1}", a, b);
-    let get_sort = get_number_input();
-    2.cmp(&get_sort)
-  });
+struct UserSortedList {
+  list: Vec<String>,
+}
+
+impl UserSortedList {
+  fn sort(&mut self) {
+    self.list.sort_by(|a, b| {
+      println!("1) {0}\n2) Equal\n3) {1}", a, b);
+      let get_sort = get_number_input();
+      2.cmp(&get_sort)
+    });
+  }
+
+  fn position(&self, needle: &String) -> usize {
+    self.list.iter().position(|item| item == needle).unwrap()
+  }
 }
 
 struct AveragedList {
@@ -51,20 +61,20 @@ impl AveragedList {
   fn sort(&mut self) {
     print!("How many people? ");
     let list_count = get_number_input();
-    let mut lists:Vec<Vec<String>> = vec![];
+    let mut lists:Vec<UserSortedList> = vec![];
 
     for _ in 0..list_count {
-      let mut new_list = self.list.clone();
-      user_sort_list(&mut new_list);
+      let mut new_list = UserSortedList { list: self.list.clone() };
+      new_list.sort();
       lists.push(new_list);
     }
 
     self.list.sort_by(|a, b| {
-      let a_abs = lists.iter().fold(0, |memo, child_list| {
-        memo + child_list.iter().position(|item| item == a).unwrap()
+      let a_abs = lists.iter().fold(0, |memo, user_list| {
+        memo + user_list.position(a)
       });
-      let b_abs = lists.iter().fold(0, |memo, child_list| {
-        memo + child_list.iter().position(|item| item == b).unwrap()
+      let b_abs = lists.iter().fold(0, |memo, user_list| {
+        memo + user_list.position(b)
       });
       b_abs.cmp(&a_abs)
     });

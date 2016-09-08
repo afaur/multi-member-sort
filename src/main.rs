@@ -37,11 +37,17 @@ fn user_sort_list(list: &mut Vec<String>) {
   });
 }
 
-struct AveragedList<'a> {
-  list: &'a mut Vec<String>,
+struct AveragedList {
+  list: Vec<String>,
 }
 
-impl<'b> AveragedList<'b> {
+impl AveragedList {
+  fn new() -> AveragedList {
+    let mut original_list:Vec<String> = vec![];
+    get_list(&mut original_list);
+    AveragedList { list: original_list }
+  }
+
   fn sort(&mut self) {
     print!("How many people? ");
     let list_count = get_number_input();
@@ -68,9 +74,6 @@ impl<'b> AveragedList<'b> {
 }
 
 fn main() {
-  let mut original_list:Vec<String> = vec![];
-  get_list(&mut original_list);
-
-  let mut average_list = AveragedList { list: &mut original_list };
-  average_list.sort();
+  let mut averaged_list = AveragedList::new();
+  averaged_list.sort();
 }

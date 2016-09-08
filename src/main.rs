@@ -2,23 +2,26 @@ use std::io::{Result, stdin, stdout};
 use std::io::prelude::*;
 use std::fs::File;
 
-fn read_line(input: &mut String) -> Result<()> {
-  try!(stdin().read_line(input));
-  Ok(())
-}
+struct Input {}
+impl Input {
+  fn line(input: &mut String) -> Result<()> {
+    try!(stdin().read_line(input));
+    Ok(())
+  }
 
-fn read_file(filename: &'static str, file_contents: &mut String) -> Result<()> {
-  let mut f = try!(File::open(filename));
-  try!(f.read_to_string(file_contents));
-  Ok(())
-}
+  fn file(filename: &'static str, file_contents: &mut String) -> Result<()> {
+    let mut file_pointer = try!(File::open(filename));
+    try!(file_pointer.read_to_string(file_contents));
+    Ok(())
+  }
 
-fn get_number_input() -> i32 {
-  let mut input = String::new();
-  stdout().flush().ok();
-  read_line(&mut input).unwrap();
+  fn number() -> i32 {
+    let mut input = String::new();
+    stdout().flush().ok();
+    Input::line(&mut input).unwrap();
 
-  return input.trim().parse::<i32>().unwrap();
+    return input.trim().parse::<i32>().unwrap();
+  }
 }
 
 struct UserSortedList {
@@ -29,7 +32,7 @@ impl UserSortedList {
   fn sort(&mut self) {
     self.list.sort_by(|a, b| {
       println!("1) {0}\n2) Equal\n3) {1}", a, b);
-      let get_sort = get_number_input();
+      let get_sort = Input::number();
       2.cmp(&get_sort)
     });
   }
@@ -47,7 +50,7 @@ impl AveragedList {
   fn new() -> AveragedList {
     let mut original_list:Vec<String> = vec![];
     let mut file_contents = String::new();
-    read_file("./data/list.txt", &mut file_contents).unwrap();
+    Input::file("./data/list.txt", &mut file_contents).unwrap();
     for item in file_contents.trim().split("\n") {
       original_list.push(item.to_string());
     }
@@ -56,7 +59,7 @@ impl AveragedList {
 
   fn sort(&mut self) {
     print!("How many people? ");
-    let list_count = get_number_input();
+    let list_count = Input::number();
     let mut lists:Vec<UserSortedList> = vec![];
 
     for _ in 0..list_count {

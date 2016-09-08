@@ -1,6 +1,7 @@
 use std::io::{Result, stdin, stdout};
 use std::io::prelude::*;
 use std::fs::File;
+use std::fmt;
 
 struct Input {}
 impl Input {
@@ -45,6 +46,12 @@ impl UserSortedList {
 struct AveragedList {
   list: Vec<String>,
   child_lists: Vec<UserSortedList>,
+}
+
+impl fmt::Display for AveragedList {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    write!(f, "{:?}", self.list)
+  }
 }
 
 impl AveragedList {
@@ -92,4 +99,5 @@ fn main() {
   }
 
   averaged_list.sort();
+  println!("{}", averaged_list);
 }

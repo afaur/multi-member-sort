@@ -8,27 +8,22 @@ mod user_sorted_list_test {
   #[test]
   fn test_position() {
     let mut averaged_list = AveragedList::new();
-    let list = averaged_list.list.clone();
+    assert_eq!(vec!["fish tacos", "tabasco", "chips and guac", "50 cent tacos"], averaged_list.list);
     let adam = UserSortedList { list: vec![
-      list.get(2).unwrap().clone(),
-      list.get(1).unwrap().clone(),
-      list.get(0).unwrap().clone(),
-      list.get(3).unwrap().clone(),
+      "chips and guac".to_string(),
+      "tabasco".to_string(),
+      "fish tacos".to_string(),
+      "50 cent tacos".to_string(),
     ]};
     averaged_list.add_child(adam);
     let blaine = UserSortedList { list: vec![
-      list.get(2).unwrap().clone(),
-      list.get(0).unwrap().clone(),
-      list.get(3).unwrap().clone(),
-      list.get(1).unwrap().clone(),
+      "chips and guac".to_string(),
+      "fish tacos".to_string(),
+      "50 cent tacos".to_string(),
+      "tabasco".to_string(),
     ]};
     averaged_list.add_child(blaine);
     averaged_list.sort();
-    assert_eq!(vec![
-      list.get(2).unwrap().clone(),
-      list.get(0).unwrap().clone(),
-      list.get(1).unwrap().clone(),
-      list.get(3).unwrap().clone(),
-    ], averaged_list.list)
+    assert_eq!(vec!["chips and guac", "fish tacos", "tabasco", "50 cent tacos"], averaged_list.list);
   }
 }

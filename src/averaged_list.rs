@@ -40,7 +40,7 @@ impl AveragedList {
       let b_abs = child_lists.iter().fold(0, |memo, user_list| {
         memo + user_list.position(b)
       });
-      b_abs.cmp(&a_abs)
+      a_abs.cmp(&b_abs)
     });
   }
 }

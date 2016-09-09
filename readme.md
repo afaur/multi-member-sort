@@ -13,4 +13,4 @@ cargo run
 
 The app will prompt you asking how many people are ranking the list, then it'll
 go through and rank all the items two at a time with each user, then average the
-lists and shwo you the output.
+lists and show you the output.

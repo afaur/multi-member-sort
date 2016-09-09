@@ -6,3 +6,6 @@ authors = ["Adam Faur <adam.faur@gmail.com>"]
 [lib]
 name = "multi_member_sort"
 path = "src/main.rs"
+
+[dependencies]
+ansi_term = "0.9"
